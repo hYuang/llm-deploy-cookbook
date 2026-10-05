@@ -1,0 +1,11 @@
+# 服务化额外依赖（在上游 CosyVoice/requirements.txt 之外）
+fastapi
+uvicorn
+pyyaml
+# 模型下载（按地区二选一即可，都装也不冲突）
+modelscope
+huggingface_hub
+# vLLM 高吞吐（必须独立 conda 环境，见 notes/pitfalls.md 第3条）：
+# vllm==0.11.0
+# transformers==4.57.1
+# numpy==1.26.4

@@ -1,0 +1,18 @@
+# CosyVoice3 服务配置
+# 模型全部从本地加载，路径在此文件配置
+
+model:
+  # 本地模型目录（绝对路径，或相对本文件所在目录）
+  model_dir: /home/ubuntu/model/CosyVoice/iic/Fun-CosyVoice3-0.5B-2512
+  # 默认参考音频（客户端未传 prompt_wav 时使用；绝对路径，或相对本 config.yaml 所在目录）
+  # zero_shot 用于 zero_shot / instruct2，cross_lingual 用于 cross_lingual
+  prompt_wav:
+    zero_shot: asset/zero_shot_prompt.wav
+    cross_lingual: asset/cross_lingual_prompt.wav
+
+# 音色上传落盘目录（绝对路径，或相对本文件所在目录）；null 用系统临时目录
+upload_dir: null
+
+server:
+  host: 0.0.0.0
+  port: 50000

@@ -218,3 +218,12 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# llm-deploy-cookbook
+CosyVoice/
+pretrained_models/
+out_*.wav
+out/
+opencode.json
+# recipe 的 env/ 目录（覆盖上方 Python 模板里的 env/）
+!recipes/**/env/
