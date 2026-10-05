@@ -72,7 +72,7 @@ server:
   port: 50000
 ```
 
-端点（输出均为 **22050Hz / 16bit / mono 的 wav 文件**）：
+端点（输出均为 **24000Hz / 16bit / mono 的 wav 文件**）：
 
 - `POST /inference_zero_shot` — 参数 `tts_text`, `prompt_text`, `prompt_wav`（可选）
 - `POST /inference_cross_lingual` — 参数 `tts_text`, `prompt_wav`（可选）
@@ -83,6 +83,13 @@ server:
 - `GET /voices` — 查看已上传音色列表（文件名 / 大小 / 修改时间）
 - `GET /voices/{name}` — 下载指定音色文件
 
+OpenAI 兼容接口：
+
+- `GET /v1/models` — 模型列表
+- `POST /v1/audio/speech` — OpenAI TTS 格式，JSON 体：`model`、`input`（合成文本）、`voice`、`response_format`（仅 `wav`）、`speed`（接受但暂忽略）；扩展字段 `prompt_text`（音色参考文本，可选，非 OpenAI 标准）
+
+`voice` 取 `default`（用 yaml 里 `model.prompt_wav.zero_shot` 的默认参考音频）或 `upload_dir` 里的音色文件名。`prompt_text` 不传时：`default` 用默认参考文本，其他音色只用 `You are a helpful assistant.<|endofprompt|>` 前缀。
+
 `prompt_wav` 为音色上传：服务端把上传的音频存到本地临时目录（`upload_dir` 可配）再喂给模型，无需文件预先存在于服务端；不传（或传空）时，服务端用 yaml 里 `model.prompt_wav` 配置的默认参考音频（`zero_shot` 用于 zero_shot / instruct2，`cross_lingual` 用于 cross_lingual）。
 
 调用示例：
@@ -92,6 +99,15 @@ curl -s -X POST "http://192.168.1.2:50000/inference_zero_shot" \
   -F "tts_text=你好，这是 CosyVoice3。" \
   -F "prompt_text=You are a helpful assistant.<|endofprompt|>希望你以后能够做的比我还好呦。" \
   -F "prompt_wav=@./asset/zero_shot_prompt.wav" \
+  -o out.wav
+```
+
+OpenAI 兼容调用：
+
+```bash
+curl -s -X POST "http://192.168.1.2:50000/v1/audio/speech" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"cosyvoice-zero-shot","input":"你好，这是 OpenAI 兼容接口。","voice":"default"}' \
   -o out.wav
 ```
 

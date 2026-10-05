@@ -44,14 +44,14 @@ function Invoke-Post([string]$Url, [string]$Out, [string[]]$Form) {
 
 Write-Host "Base: $Base"
 
-# 1. health
-Write-Host "`n=== 1. health ==="
+# 1. 连通性检查（/v1/models）
+Write-Host "`n=== 1. 连通性 ==="
 try {
-    $h = Invoke-RestMethod -Uri "$Base/health" -TimeoutSec 15
-    Write-Host ("  status={0} sample_rate={1} custom_voices=[{2}]" -f $h.status, $h.sample_rate, ($h.custom_voices -join ","))
+    $h = Invoke-RestMethod -Uri "$Base/v1/models" -TimeoutSec 15
+    Write-Host ("  models=[{0}]" -f (($h.data | ForEach-Object { $_.id }) -join ","))
     $script:pass++
 } catch {
-    Write-Host "  FAIL /health 连不上: $_" -ForegroundColor Red
+    Write-Host "  FAIL $Base/v1/models 连不上: $_" -ForegroundColor Red
     Write-Host "服务没起来或端口不对，用 -Base 指定。" -ForegroundColor Yellow
     exit 1
 }
@@ -132,8 +132,11 @@ if (Test-Path "$outdir\stream.wav") {
 Write-Host "`n=== 9. OpenAI 兼容 ==="
 $models = & curl.exe -s "$Base/v1/models" 2>&1
 Write-Host "  /v1/models: $models"
+# 中文 JSON 不能走命令行传参（控制台代码页会破坏编码），写文件后用 -d @file
 $json = '{"model":"cosyvoice-zero-shot","input":"你好，这是 OpenAI 兼容接口测试。","voice":"default"}'
-$oa = @("-s", "-X", "POST", "$Base/v1/audio/speech", "-H", "Content-Type: application/json", "-d", $json, "-o", "$outdir\openai.wav", "-w", "[http_code=%{http_code} time=%{time_total}s]")
+$reqFile = Join-Path $outdir "openai_req.json"
+[IO.File]::WriteAllText($reqFile, $json, (New-Object System.Text.UTF8Encoding($false)))
+$oa = @("-s", "-X", "POST", "$Base/v1/audio/speech", "-H", "Content-Type: application/json", "-d", "@$reqFile", "-o", "$outdir\openai.wav", "-w", "[http_code=%{http_code} time=%{time_total}s]")
 Write-Host "  $(& curl.exe @oa 2>&1)"
 Check "openai" "$outdir\openai.wav"
 

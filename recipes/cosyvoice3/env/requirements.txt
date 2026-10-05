@@ -1,5 +1,6 @@
 # 服务化额外依赖（在上游 CosyVoice/requirements.txt 之外）
 fastapi
+python-multipart   # FastAPI 表单/文件上传（prompt_wav）依赖，缺了服务起不来
 uvicorn
 pyyaml
 # 模型下载（按地区二选一即可，都装也不冲突）

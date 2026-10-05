@@ -8,7 +8,7 @@
 #
 # 配置全部读自 yaml（见 config.yaml）：模型从本地加载，路径在 yaml 中配置
 #
-# 输出: 22050Hz / 16bit / mono wav 文件
+# 输出: 24000Hz / 16bit / mono wav 文件
 #
 # 注意: prompt_wav 为音色上传，服务端把上传的音频存到本地临时目录再喂给模型；
 # 不传则用 yaml 配置的默认参考音频。
