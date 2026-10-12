@@ -43,11 +43,7 @@ snapshot_download('FunAudioLLM/Fun-CosyVoice3-0.5B-2512', local_dir='pretrained_
 # 海外：huggingface_hub 同名仓库，用法相同
 ```
 
-### 3. 本地推理
-
-`code/infer.py`（zero_shot / cross_lingual / instruct2 三种方式，产出 `out_*.wav`）。
-
-### 4. FastAPI 服务
+### 3. FastAPI 服务
 
 `code/app.py`（官方对应 `runtime/python/fastapi/server.py`）：
 
@@ -127,7 +123,6 @@ curl -s -O -J "http://localhost:50000/voices/<name>"
 ## 目录
 
 - `env/requirements.txt` — 服务化额外依赖
-- `code/infer.py` — 本地推理
 - `code/config.yaml` — 服务配置（模型本地路径、host/port）
 - `code/app.py` — FastAPI 服务入口（读 yaml、模型加载、启动）
 - `code/service/` — 服务代码

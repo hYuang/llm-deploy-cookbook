@@ -12,7 +12,6 @@ recipes/<model>/
 ├── env/
 │   └── requirements.txt  # 我们在上游依赖之外额外固定的依赖
 ├── code/
-│   ├── infer.py          # 本地推理参考脚本
 │   └── server.py         # 服务化（FastAPI）参考脚本
 └── notes/
     └── pitfalls.md       # 实际部署踩到的坑 + 解法（持续补充）
