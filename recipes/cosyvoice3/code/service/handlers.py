@@ -10,7 +10,7 @@ from datetime import datetime
 from typing import Optional
 
 import numpy as np
-from fastapi import APIRouter, File, HTTPException, UploadFile
+from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 from fastapi.responses import FileResponse, Response
 from pydantic import BaseModel
 
@@ -51,23 +51,23 @@ def create_router(model, default_prompt_wav: dict, upload_dir: str) -> APIRouter
         return saved
 
     @router.post("/inference_zero_shot")
-    async def inference_zero_shot(tts_text: str, prompt_text: str, prompt_wav: UploadFile = File(None)):
+    async def inference_zero_shot(tts_text: str = Form(...), prompt_text: str = Form(...), prompt_wav: UploadFile = File(None)):
         return wav_response(
             model.inference_zero_shot(tts_text, prompt_text, await prompt_path(prompt_wav, default_prompt_wav["zero_shot"]), stream=True),
             model.sample_rate,
         )
 
     @router.post("/inference_cross_lingual")
-    async def inference_cross_lingual(tts_text: str, prompt_wav: UploadFile = File(None)):
+    async def inference_cross_lingual(tts_text: str = Form(...), prompt_wav: UploadFile = File(None)):
         return wav_response(
             model.inference_cross_lingual(tts_text, await prompt_path(prompt_wav, default_prompt_wav["cross_lingual"]), stream=True),
             model.sample_rate,
         )
 
     @router.post("/inference_instruct2")
-    async def inference_instruct2(tts_text: str, instruct_text: str, prompt_wav: UploadFile = File(None)):
+    async def inference_instruct2(tts_text: str = Form(...), instruct_text: str = Form(...), prompt_wav: UploadFile = File(None)):
         return wav_response(
-            model.inference_instruct2(tts_text, await prompt_path(prompt_wav, default_prompt_wav["zero_shot"]), instruct_text, stream=True),
+            model.inference_instruct2(tts_text, instruct_text, await prompt_path(prompt_wav, default_prompt_wav["zero_shot"]), stream=True),
             model.sample_rate,
         )
 
