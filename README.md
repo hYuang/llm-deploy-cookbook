@@ -22,6 +22,7 @@ recipes/<model>/
 | 模型 | 类型 | 状态 | 说明 |
 | --- | --- | --- | --- |
 | [CosyVoice3](recipes/cosyvoice3/README.md) | TTS（0.5B） | ✅ 已部署 | 零样本语音克隆 / 跨语言 / 指令控制 |
+| [PaddleOCR-VL](recipes/paddleocr-vl/README.md) | 文档解析 VLM（0.9B） | 🚧 部署中 | OCR / 表格 / 公式 / 图表，vLLM + OpenAI 兼容接口 |
 
 ## 如何新增一个 recipe
 

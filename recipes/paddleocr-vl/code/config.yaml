@@ -1,0 +1,27 @@
+# PaddleOCR-VL 包装服务配置
+# 本服务是 vLLM 前面的一层薄封装，模型由 vLLM 加载，这里只配后端地址
+
+backend:
+  # vLLM OpenAI 兼容地址（末尾 /v1 不要漏）
+  base_url: http://127.0.0.1:8000/v1
+  # 必须与 vllm serve --served-model-name 一致
+  model: PaddleOCR-VL
+  api_key: EMPTY
+  # 单张长图可能很慢，超时给足
+  timeout: 3600
+
+defaults:
+  # /v1/chat/completions 未带任务前缀、/ocr 未指定 task 时用
+  # 可选：ocr / table / formula / chart
+  task: ocr
+
+# 可选：PP-DocLayoutV2 整页版面解析（需另装 paddleocr[doc-parser]）
+pipeline:
+  enabled: false
+  # 本地 PP-DocLayoutV2 模型目录
+  layout_detection_model_dir: /home/ubuntu/model/PP-DocLayoutV2
+
+server:
+  host: 0.0.0.0
+  # 不要和 vLLM 的 8000 冲突
+  port: 50001

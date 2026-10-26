@@ -1,0 +1,14 @@
+# PaddleOCR-VL 包装服务额外依赖（vLLM/torch 见 ../README.md，版本互相绑定，不写死在这里）
+fastapi
+uvicorn
+python-multipart   # /ocr /parse 的 multipart 文件上传
+pyyaml
+requests           # 转发到 vLLM 的 /v1/chat/completions
+openai             # 客户端示例（也可用 requests 直接调）
+# 模型下载（按地区二选一即可，都装也不冲突）
+huggingface_hub
+modelscope
+# 整页版面解析（可选，建议独立环境，见 notes/pitfalls.md）：
+# paddlepaddle-gpu==3.2.1
+# paddleocr[doc-parser]
+# safetensors
